@@ -37,8 +37,6 @@
 
 🇧🇷 &nbsp;Pre-medical student from **Brazil**, building **Anki add-ons** as a hobby — small, focused widgets that make studying feel a bit less like work.
 
-🤖 &nbsp;AI enthusiast. I like automating the boring parts and letting the flashcards do the rest.
-
 🌐 &nbsp;A **new web-app is on the way** — details soon.
 
 <br>
