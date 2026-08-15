@@ -24,7 +24,11 @@ from __future__ import annotations
 import base64
 import io
 import os
+import re
+import urllib.request
 from dataclasses import dataclass, field
+from datetime import date
+from html.parser import HTMLParser
 
 from fontTools.ttLib import TTFont
 from fontTools.subset import Subsetter, Options
@@ -84,6 +88,11 @@ for _pal in (LIGHT, DARK):
     )
 
 THEMES = {"light": LIGHT, "dark": DARK}
+
+HEATMAP_LEVELS = {
+    "light": ("#ebedf0", "#c6d1dc", "#9aa7b4", "#64748b", "#334155"),
+    "dark": ("#161b22", "#29313a", "#3d4955", "#5d6b7a", "#8c9bab"),
+}
 
 # --------------------------------------------------------------------------
 # shape language - rectangles with a small radius, never pills
@@ -147,6 +156,98 @@ def font_face(weight: int, chars: str) -> str:
 
 def esc(s: str) -> str:
     return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+
+
+# --------------------------------------------------------------------------
+# GitHub contribution heatmap
+# --------------------------------------------------------------------------
+
+GITHUB_USERNAME = "thepeacemonk"
+
+
+class ContributionParser(HTMLParser):
+    """Read GitHub's public contribution-calendar cells without an API token."""
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.days: list[tuple[date, int, int]] = []
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if tag != "td":
+            return
+        data = dict(attrs)
+        if not {"data-date", "data-level", "data-ix"} <= data.keys():
+            return
+        try:
+            self.days.append(
+                (date.fromisoformat(data["data-date"]), int(data["data-level"]), int(data["data-ix"]))
+            )
+        except (TypeError, ValueError):
+            pass
+
+
+def fetch_contributions(username: str = GITHUB_USERNAME) -> list[tuple[date, int, int]]:
+    request = urllib.request.Request(
+        f"https://github.com/users/{username}/contributions",
+        headers={"User-Agent": "thepeacemonk-profile-heatmap"},
+    )
+    with urllib.request.urlopen(request, timeout=30) as response:
+        page = response.read().decode("utf-8")
+    parser = ContributionParser()
+    parser.feed(page)
+    if len(parser.days) < 350:
+        raise RuntimeError("GitHub did not return a complete contribution calendar")
+    return parser.days
+
+
+def heatmap_svg(theme: str, days: list[tuple[date, int, int]]) -> str:
+    """A compact, calendar-aligned contribution grid with CSS hover feedback."""
+    c = THEMES[theme]
+    levels = HEATMAP_LEVELS[theme]
+    width, height = 760, 170
+    left, top = 18, 52
+    cell, gap = 10, 4
+    first_by_month: dict[tuple[int, int], int] = {}
+    cells: list[str] = []
+
+    for day, level, week in days:
+        x = left + week * (cell + gap)
+        y = top + ((day.weekday() + 1) % 7) * (cell + gap)
+        key = (day.year, day.month)
+        first_by_month.setdefault(key, x)
+        cells.append(
+            f'<rect class="cell l{level}" x="{x}" y="{y}" width="{cell}" height="{cell}" '
+            f'rx="2" aria-label="{day.isoformat()}: contribution level {level}"/>'
+        )
+
+    labels: list[str] = []
+    last_x = -999
+    for key, x in first_by_month.items():
+        if x - last_x < 44:
+            continue
+        labels.append(f'<text x="{x}" y="34">{date(key[0], key[1], 1):%b}</text>')
+        last_x = x
+
+    style = (
+        f"text{{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;fill:{c['text']}}}"
+        f".title{{font-size:16px;font-weight:600}}.month{{font-size:11px;fill:{c['dim']}}}"
+        + "".join(f".l{i}{{fill:{colour}}}" for i, colour in enumerate(levels))
+        + ".cell{transform-box:fill-box;transform-origin:center;transition:transform .16s ease,filter .16s ease}"
+        + ".cell:hover{transform:scale(1.45);filter:brightness(1.14)}"
+    )
+    legend = "".join(
+        f'<rect x="{left + 34 + i * 14}" y="151" width="10" height="10" rx="2" fill="{colour}"/>'
+        for i, colour in enumerate(levels)
+    )
+    return (
+        f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" '
+        f'viewBox="0 0 {width} {height}" role="img" aria-label="GitHub contribution heatmap">'
+        f"<style>{style}</style>"
+        f'<text class="title" x="{left}" y="18">Contribution activity</text>'
+        f'<g class="month">{"".join(labels)}</g><g>{"".join(cells)}</g>'
+        f'<text class="month" x="{left}" y="160">Less</text>{legend}'
+        f'<text class="month" x="{left + 108}" y="160">More</text></svg>'
+    )
 
 
 def wrap(text: str, size: float, weight: int, max_w: float, max_lines: int = 2) -> list[str]:
@@ -680,5 +781,16 @@ def main() -> None:
             write(f"assets/cards/{card.slug}-{theme}.svg", card_svg(theme, card))
 
 
+def build_heatmap() -> None:
+    days = fetch_contributions()
+    for theme in THEMES:
+        write(f"assets/heatmap-{theme}.svg", heatmap_svg(theme, days))
+
+
 if __name__ == "__main__":
-    main()
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--heatmap", action="store_true", help="refresh contribution heatmap assets")
+    args = parser.parse_args()
+    build_heatmap() if args.heatmap else main()
