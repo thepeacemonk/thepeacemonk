@@ -42,7 +42,13 @@ I enjoy AI, automation, and thoughtful tools.
   <img alt="Anki add ons" src="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/df7ff96b2f8dd53122ec5d18e6364f6bfd771491/assets/header-addons-light.svg" height="38">
 </picture>
 
-<div align="center">
+<br>
+
+<sub><a href="https://ankiweb.net/shared/by-author/1011095603">View all add ons on AnkiWeb</a> · <a href="https://github.com/thepeacemonk">Browse their GitHub repositories</a></sub>
+
+<br><br>
+
+<div>
 
 <a href="https://ankiweb.net/shared/info/1011095603"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/df7ff96b2f8dd53122ec5d18e6364f6bfd771491/assets/cards/onigiri-dark.svg"><img alt="Onigiri" src="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/df7ff96b2f8dd53122ec5d18e6364f6bfd771491/assets/cards/onigiri-light.svg" width="260"></picture></a>
 <a href="https://ankiweb.net/shared/info/516325516"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/df7ff96b2f8dd53122ec5d18e6364f6bfd771491/assets/cards/focumon-dark.svg"><img alt="Focumon" src="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/df7ff96b2f8dd53122ec5d18e6364f6bfd771491/assets/cards/focumon-light.svg" width="260"></picture></a>
@@ -66,11 +72,11 @@ I enjoy AI, automation, and thoughtful tools.
   <img alt="Other projects" src="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/df7ff96b2f8dd53122ec5d18e6364f6bfd771491/assets/header-projects-light.svg" height="38">
 </picture>
 
-<div align="center">
+<div>
 
-<a href="https://github.com/thepeacemonk/Stacked-Library"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/df7ff96b2f8dd53122ec5d18e6364f6bfd771491/assets/cards/stacked-library-dark.svg"><img alt="Stacked Library" src="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/df7ff96b2f8dd53122ec5d18e6364f6bfd771491/assets/cards/stacked-library-light.svg" width="260"></picture></a>
-<a href="https://github.com/thepeacemonk/Little-Cats-Explain"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/df7ff96b2f8dd53122ec5d18e6364f6bfd771491/assets/cards/little-cats-dark.svg"><img alt="Little Cats Explain" src="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/df7ff96b2f8dd53122ec5d18e6364f6bfd771491/assets/cards/little-cats-light.svg" width="260"></picture></a>
-<a href="https://github.com/thepeacemonk/Highlightr-Enhanced"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/df7ff96b2f8dd53122ec5d18e6364f6bfd771491/assets/cards/highlightr-dark.svg"><img alt="Highlightr Enhanced" src="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/df7ff96b2f8dd53122ec5d18e6364f6bfd771491/assets/cards/highlightr-light.svg" width="260"></picture></a>
+<a href="https://github.com/thepeacemonk/Stacked-Library"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/main/assets/cards/stacked-library-dark.svg?v=20260815"><img alt="Stacked Library" src="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/main/assets/cards/stacked-library-light.svg?v=20260815" width="260"></picture></a>
+<a href="https://github.com/thepeacemonk/Little-Cats-Explain"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/main/assets/cards/little-cats-dark.svg?v=20260815"><img alt="Little Cats Explain" src="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/main/assets/cards/little-cats-light.svg?v=20260815" width="260"></picture></a>
+<a href="https://github.com/thepeacemonk/Highlightr-Enhanced"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/main/assets/cards/highlightr-dark.svg?v=20260815"><img alt="Highlightr Enhanced" src="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/main/assets/cards/highlightr-light.svg?v=20260815" width="260"></picture></a>
 
 </div>
 
@@ -81,7 +87,7 @@ I enjoy AI, automation, and thoughtful tools.
   <img alt="In the oven" src="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/df7ff96b2f8dd53122ec5d18e6364f6bfd771491/assets/header-soon-light.svg" height="38">
 </picture>
 
-<div align="center">
+<div>
 
 <picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/df7ff96b2f8dd53122ec5d18e6364f6bfd771491/assets/cards/astra-dark.svg"><img alt="Astra, in development" src="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/df7ff96b2f8dd53122ec5d18e6364f6bfd771491/assets/cards/astra-light.svg" width="260"></picture>
 <picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/df7ff96b2f8dd53122ec5d18e6364f6bfd771491/assets/cards/8bitdo-dark.svg"><img alt="8BitDo Micro, in development" src="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/df7ff96b2f8dd53122ec5d18e6364f6bfd771491/assets/cards/8bitdo-light.svg" width="260"></picture>
@@ -91,30 +97,11 @@ I enjoy AI, automation, and thoughtful tools.
 
 <br>
 
-<div align="center">
+<div>
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/main/assets/heatmap-dark.svg?v=20260815">
   <img alt="GitHub contribution heatmap" src="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/main/assets/heatmap-light.svg?v=20260815" width="760">
 </picture>
-
-</div>
-
-<br>
-
-<div align="center">
-
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/df7ff96b2f8dd53122ec5d18e6364f6bfd771491/assets/header-connect-dark.svg">
-  <img alt="Get in touch" src="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/df7ff96b2f8dd53122ec5d18e6364f6bfd771491/assets/header-connect-light.svg" height="38">
-</picture>
-
-<br><br>
-
-Questions, feedback, or ideas? The door is open.
-
-<br><br>
-
-[Discord](https://discord.gg/h4bYatgh44) · [AnkiWeb](https://ankiweb.net/shared/by-author/1011095603) · [GitHub](https://github.com/thepeacemonk)
 
 </div>

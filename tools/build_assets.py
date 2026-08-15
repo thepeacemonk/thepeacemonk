@@ -23,6 +23,7 @@ from __future__ import annotations
 
 import base64
 import io
+import json
 import os
 import re
 import urllib.request
@@ -201,11 +202,11 @@ def fetch_contributions(username: str = GITHUB_USERNAME) -> list[tuple[date, int
 
 
 def heatmap_svg(theme: str, days: list[tuple[date, int, int]]) -> str:
-    """A compact, calendar-aligned contribution grid with CSS hover feedback."""
+    """A compact, calendar-aligned contribution grid."""
     c = THEMES[theme]
     levels = HEATMAP_LEVELS[theme]
     width, height = 760, 170
-    left, top = 18, 52
+    left, top = 0, 52
     cell, gap = 10, 4
     first_by_month: dict[tuple[int, int], int] = {}
     cells: list[str] = []
@@ -232,8 +233,6 @@ def heatmap_svg(theme: str, days: list[tuple[date, int, int]]) -> str:
         f"text{{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;fill:{c['text']}}}"
         f".title{{font-size:16px;font-weight:600}}.month{{font-size:11px;fill:{c['dim']}}}"
         + "".join(f".l{i}{{fill:{colour}}}" for i, colour in enumerate(levels))
-        + ".cell{transform-box:fill-box;transform-origin:center;transition:transform .16s ease,filter .16s ease}"
-        + ".cell:hover{transform:scale(1.45);filter:brightness(1.14)}"
     )
     legend = "".join(
         f'<rect x="{left + 34 + i * 14}" y="151" width="10" height="10" rx="2" fill="{colour}"/>'
@@ -661,6 +660,8 @@ class Card:
     logo: str | None = None          # file in assets/logos, or None
     tag: str | None = None           # small chip next to the name
     tag_colour: str = "peach"
+    repo: str | None = None           # GitHub repository name for star refreshes
+    stars: int | None = None
 
 
 def card_svg(theme: str, card: Card) -> str:
@@ -675,7 +676,8 @@ def card_svg(theme: str, card: Card) -> str:
     height = top + 10 + 2 * 18 + CARD_PAD - 6  # always two description lines tall
 
     name_w = text_width(card.name, name_size, 600)
-    chars = card.name + card.desc + (card.tag or "")
+    display_tag = f"★ {card.stars}" if card.stars is not None else card.tag
+    chars = card.name + card.desc + (display_tag or "")
     faces = font_face(600, chars) + font_face(400, chars)
 
     media = ""
@@ -686,8 +688,8 @@ def card_svg(theme: str, card: Card) -> str:
         media = placeholder_markup(theme, LOGO_W, LOGO_BOTTOM, CARD_PAD)
 
     chip = ""
-    if card.tag:
-        tw = text_width(card.tag, tag_size, 600)
+    if display_tag:
+        tw = text_width(display_tag, tag_size, 600)
         cw, ch = tw + 18, 19.0
         cx = CARD_PAD + name_w + 9
         chip = (
@@ -695,7 +697,7 @@ def card_svg(theme: str, card: Card) -> str:
             f'height="{ch:.1f}" rx="{R_SM:.0f}" fill="{c["chrome"]}" '
             f'stroke="{c["border"]}" stroke-width="1"/>'
             f'<text x="{cx + 9:.1f}" y="{top - name_size + 1.5 + ch / 2 + tag_size * 0.35:.1f}" '
-            f'class="chip">{esc(card.tag)}</text>'
+            f'class="chip">{esc(display_tag)}</text>'
         )
 
     desc = "".join(
@@ -752,11 +754,11 @@ SOON = [
 
 PROJECTS = [
     Card("stacked-library", "Stacked Library", "Spicetify extension that groups artists, "
-         "albums and playlists in Spotify", None, "JavaScript", "yellow"),
+         "albums and playlists in Spotify", None, "JavaScript", "yellow", "Stacked-Library", 0),
     Card("little-cats", "Little Cats Explain", "AI Studio experiment recreating "
-         "“Explain Things with Lots of Tiny Cats”", None, "TypeScript", "blue"),
+         "“Explain Things with Lots of Tiny Cats”", None, "TypeScript", "blue", "Little-Cats-Explain", 1),
     Card("highlightr", "Highlightr Enhanced", "Fork of the Obsidian highlighting menu, "
-         "with colour-coded highlighting", None, "TypeScript", "blue"),
+         "with colour-coded highlighting", None, "TypeScript", "blue", "Highlightr-Enhanced", 1),
 ]
 
 
@@ -787,10 +789,41 @@ def build_heatmap() -> None:
         write(f"assets/heatmap-{theme}.svg", heatmap_svg(theme, days))
 
 
+def fetch_project_stars() -> None:
+    """Update the project cards from GitHub's public repository metadata."""
+    for card in PROJECTS:
+        if not card.repo:
+            continue
+        request = urllib.request.Request(
+            f"https://api.github.com/repos/{GITHUB_USERNAME}/{card.repo}",
+            headers={
+                "Accept": "application/vnd.github+json",
+                "User-Agent": "thepeacemonk-profile-stars",
+            },
+        )
+        with urllib.request.urlopen(request, timeout=30) as response:
+            card.stars = int(json.load(response)["stargazers_count"])
+
+
+def build_project_cards(refresh_stars: bool = False) -> None:
+    if refresh_stars:
+        fetch_project_stars()
+    for theme in THEMES:
+        for card in PROJECTS:
+            write(f"assets/cards/{card.slug}-{theme}.svg", card_svg(theme, card))
+
+
 if __name__ == "__main__":
     import argparse
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--heatmap", action="store_true", help="refresh contribution heatmap assets")
+    parser.add_argument("--dynamic", action="store_true", help="refresh heatmap and project star counts")
     args = parser.parse_args()
-    build_heatmap() if args.heatmap else main()
+    if args.dynamic:
+        build_heatmap()
+        build_project_cards(refresh_stars=True)
+    elif args.heatmap:
+        build_heatmap()
+    else:
+        main()
