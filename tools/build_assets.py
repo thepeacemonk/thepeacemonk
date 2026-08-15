@@ -6,6 +6,10 @@ Everything is generated from this one file so the look stays consistent:
   assets/terminal-{light,dark}.svg   animated typing terminal (hero)
   assets/header-*-{light,dark}.svg   section headings
   assets/badges/*-{light,dark}.svg   link badges
+  assets/cards/*-{light,dark}.svg    add-on / project grid tiles
+
+Grid tiles inline the matching logo from assets/logos untouched - the logos own
+their colours, everything else follows the GitHub brand palette below.
 
 Poppins is embedded as a base64 WOFF2 *subset* inside each SVG. GitHub renders
 README images through camo, which blocks external font requests, so a font only
@@ -32,38 +36,48 @@ FONT_DIR = os.path.join(ROOT, "assets", "fonts")
 # palette - flat colours only, no gradients anywhere
 # --------------------------------------------------------------------------
 
+# Every hex below comes from the official GitHub brand palette
+# (brand.github.com/foundations/color): core green + process black, the six
+# neutrals, and the Copilot / Security accent ramps.
+
 LIGHT = {
-    "page": "#eff1f5",
-    "chrome": "#e6e9ef",
+    "page": "#f2f5f3",       # gray 1
+    "chrome": "#e4ebe6",     # gray 2
     "body": "#ffffff",
-    "border": "#ccd0da",
-    "text": "#4c4f69",
-    "dim": "#6c6f85",
-    "green": "#40a02b",
-    "blue": "#1e66f5",
-    "mauve": "#8839ef",
-    "peach": "#fe640b",
-    "teal": "#179299",
-    "red": "#d20f39",
-    "yellow": "#df8e1d",
+    "border": "#b6bfb8",     # gray 3
+    "text": "#101411",       # process black
+    "dim": "#909692",        # gray 4
+    "green": "#08872b",      # green 5
+    "blue": "#1a61fe",       # blue 3
+    "mauve": "#8534f3",      # copilot purple
+    "peach": "#d67200",      # lime 5
+    "teal": "#212183",       # blue 5
+    "red": "#c53211",        # orange 4
+    "yellow": "#db9d00",     # lime 4
+    "card": "#f2f5f3",       # gray 1
+    "card_border": "#dfe6e1",
+    "card_border_op": "1",
     "badge_fg": "#ffffff",
 }
 
 DARK = {
-    "page": "#1e1e2e",
-    "chrome": "#181825",
-    "body": "#1e1e2e",
-    "border": "#313244",
-    "text": "#cdd6f4",
-    "dim": "#a6adc8",
-    "green": "#a6e3a1",
-    "blue": "#89b4fa",
-    "mauve": "#cba6f7",
-    "peach": "#fab387",
-    "teal": "#94e2d5",
-    "red": "#f38ba8",
-    "yellow": "#f9e2af",
-    "badge_fg": "#11111b",
+    "page": "#101411",       # process black
+    "chrome": "#232925",     # gray 5
+    "body": "#101411",
+    "border": "#232925",     # gray 5
+    "text": "#f2f5f3",       # gray 1
+    "dim": "#909692",        # gray 4
+    "green": "#5fed83",      # green 3
+    "blue": "#3094ff",       # security blue
+    "mauve": "#b870ff",      # purple 2
+    "peach": "#f08a3a",      # orange 2
+    "teal": "#9eecff",       # blue 1
+    "red": "#fe4c25",        # orange 3
+    "yellow": "#d3fa37",     # lime 2
+    "card": "#232925",       # gray 5
+    "card_border": "#909692",  # gray 4
+    "card_border_op": "0.35",
+    "badge_fg": "#101411",
 }
 
 THEMES = {"light": LIGHT, "dark": DARK}
@@ -121,6 +135,29 @@ def font_face(weight: int, chars: str) -> str:
 
 def esc(s: str) -> str:
     return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+
+
+def wrap(text: str, size: float, weight: int, max_w: float, max_lines: int = 2) -> list[str]:
+    """Greedy word wrap using real font metrics; last line gets an ellipsis."""
+    lines: list[str] = []
+    cur = ""
+    for word in text.split():
+        trial = f"{cur} {word}".strip()
+        if not cur or text_width(trial, size, weight) <= max_w:
+            cur = trial
+            continue
+        lines.append(cur)
+        cur = word
+        if len(lines) == max_lines:
+            break
+    if len(lines) < max_lines and cur:
+        lines.append(cur)
+    if len(lines) == max_lines and cur and cur not in lines[-1]:
+        tail = lines[-1]
+        while tail and text_width(tail + "...", size, weight) > max_w:
+            tail = tail[:-1]
+        lines[-1] = tail.rstrip() + "..."
+    return lines
 
 
 # --------------------------------------------------------------------------
@@ -343,9 +380,9 @@ def terminal_svg(theme: str) -> str:
         f"<style>{style}{title_face}"
         f".t{{font-family:'Poppins',sans-serif;font-size:13px;font-weight:500;fill:{c['dim']}}}"
         f"</style>"
-        f'<rect x="1" y="1" width="{W - 2}" height="{height - 2}" rx="14" '
+        f'<rect x="1" y="1" width="{W - 2}" height="{height - 2}" rx="20" '
         f'fill="{c["body"]}" stroke="{c["border"]}" stroke-width="1.5"/>'
-        f'<path d="M1 15a14 14 0 0 1 14-14h{W - 30}a14 14 0 0 1 14 14v{CHROME_H - 15}H1z" '
+        f'<path d="M1 21a20 20 0 0 1 20-20h{W - 42}a20 20 0 0 1 20 20v{CHROME_H - 21}H1z" '
         f'fill="{c["chrome"]}"/>'
         f'<line x1="1" y1="{CHROME_H}" x2="{W - 1}" y2="{CHROME_H}" '
         f'stroke="{c["border"]}" stroke-width="1.5"/>'
@@ -372,23 +409,28 @@ HEADERS = [
 
 
 def header_svg(theme: str, label: str, colour: str) -> str:
+    """Fully rounded pill chip - solid accent fill, no gradient."""
     c = THEMES[theme]
-    size = 21.0
+    size = 19.0
+    pad = 22.0
+    dot = 9.0
+    gap = 11.0
     w = text_width(label, size, 600)
-    bar_w = 5.0
-    gap = 12.0
-    width = int(bar_w + gap + w + 4)
-    height = 40
+    width = int(pad + dot + gap + w + pad)
+    height = 42
     face = font_face(600, label)
     return (
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" '
         f'viewBox="0 0 {width} {height}" role="img" aria-label="{esc(label)}">'
         f"<style>{face}"
         f"text{{font-family:'Poppins',sans-serif;font-size:{size}px;font-weight:600;"
-        f"fill:{c['text']}}}</style>"
-        f'<rect x="0" y="8" width="{bar_w}" height="{height - 16}" rx="2.5" '
+        f"fill:{c['badge_fg']}}}</style>"
+        f'<rect width="{width}" height="{height}" rx="{height / 2:.1f}" '
         f'fill="{c[colour]}"/>'
-        f'<text x="{bar_w + gap}" y="{height / 2 + size * 0.36:.1f}">{esc(label)}</text>'
+        f'<circle cx="{pad + dot / 2:.1f}" cy="{height / 2:.1f}" r="{dot / 2:.1f}" '
+        f'fill="{c["badge_fg"]}" opacity="0.85"/>'
+        f'<text x="{pad + dot + gap:.1f}" y="{height / 2 + size * 0.35:.1f}">'
+        f"{esc(label)}</text>"
         f"</svg>"
     )
 
@@ -410,7 +452,7 @@ def badge_svg(theme: str, label: str, icon: str, colour: str) -> str:
     """Flat pill badge - solid fill, no gradient."""
     c = THEMES[theme]
     size = 14.0
-    pad = 14.0
+    pad = 18.0
     icon_size = 16.0
     gap = 8.0
     w = text_width(label, size, 600)
@@ -427,7 +469,7 @@ def badge_svg(theme: str, label: str, icon: str, colour: str) -> str:
         f"<style>{face}"
         f"text{{font-family:'Poppins',sans-serif;font-size:{size}px;font-weight:600;fill:{fg}}}"
         f"</style>"
-        f'<rect width="{width}" height="{height}" rx="8" fill="{fill}"/>'
+        f'<rect width="{width}" height="{height}" rx="{height / 2:.1f}" fill="{fill}"/>'
         f'<g transform="translate({pad:.1f} {icon_y:.1f}) scale({scale:.4f})">'
         f'<path d="{ICONS[icon]}" fill="{fg}"/></g>'
         f'<text x="{pad + icon_size + gap:.1f}" y="{height / 2 + size * 0.35:.1f}">'
@@ -439,6 +481,176 @@ BADGES = [
     ("discord", "Join my Discord", "discord", "mauve"),
     ("ankiweb", "My add-ons on AnkiWeb", "anki", "blue"),
     ("github", "All my repos", "github", "green"),
+]
+
+
+# --------------------------------------------------------------------------
+# project cards - the light/dark grid
+# --------------------------------------------------------------------------
+
+LOGO_DIR = os.path.join(ROOT, "assets", "logos")
+
+CARD_W = 300.0
+CARD_PAD = 22.0
+LOGO_W = 124.0
+LOGO_BOTTOM = 104.0  # every logo sits on the same baseline, whatever its aspect
+
+def logo_markup(filename: str, w: float, bottom: float, x: float) -> str:
+    """Inline a logo file into a card. Logo colours are never touched."""
+    import re
+
+    path = os.path.join(LOGO_DIR, filename)
+
+    if filename.lower().endswith((".jpg", ".jpeg", ".png")):
+        with open(path, "rb") as fh:
+            raw = fh.read()
+        mime = "image/png" if filename.lower().endswith(".png") else "image/jpeg"
+        b64 = base64.b64encode(raw).decode()
+        # flat logos are 203x111 pills; JPEG has no alpha, so clip the corners back
+        vb_w, vb_h = 203.0, 111.0
+        h = w * vb_h / vb_w
+        cid = f"clip-{os.path.splitext(filename)[0]}"
+        return (
+            f'<clipPath id="{cid}"><rect x="{x:.1f}" y="{bottom - h:.1f}" '
+            f'width="{w:.1f}" height="{h:.1f}" rx="{h / 2:.1f}"/></clipPath>'
+            f'<image x="{x:.1f}" y="{bottom - h:.1f}" width="{w:.1f}" height="{h:.1f}" '
+            f'clip-path="url(#{cid})" href="data:{mime};base64,{b64}"/>'
+        )
+
+    with open(path, encoding="utf-8") as fh:
+        src = fh.read()
+    open_tag = re.search(r"<svg[^>]*>", src).group(0)
+    vb = re.search(r'viewBox="([\d.\s-]+)"', open_tag).group(1).split()
+    vb_w, vb_h = float(vb[2]), float(vb[3])
+    inner = src[src.index(open_tag) + len(open_tag): src.rindex("</svg>")]
+    h = w * vb_h / vb_w
+    # some logos use xlink:href internally; the nested <svg> needs the prefix bound
+    return (
+        f'<svg x="{x:.1f}" y="{bottom - h:.1f}" width="{w:.1f}" height="{h:.1f}" '
+        f'viewBox="0 0 {vb_w:g} {vb_h:g}" '
+        f'xmlns:xlink="http://www.w3.org/1999/xlink">{inner}</svg>'
+    )
+
+
+def placeholder_markup(theme: str, w: float, bottom: float, x: float) -> str:
+    c = THEMES[theme]
+    h = w * 111.0 / 203.0
+    return (
+        f'<rect x="{x:.1f}" y="{bottom - h:.1f}" width="{w:.1f}" height="{h:.1f}" '
+        f'rx="{h / 2:.1f}" fill="none" stroke="{c["dim"]}" stroke-width="2" '
+        f'stroke-dasharray="7 7" opacity="0.55"/>'
+    )
+
+
+@dataclass
+class Card:
+    slug: str
+    name: str
+    desc: str
+    logo: str | None = None          # file in assets/logos, or None
+    tag: str | None = None           # small chip next to the name
+    tag_colour: str = "peach"
+
+
+def card_svg(theme: str, card: Card) -> str:
+    """Rounded surface: logo pill, name, wrapped description, optional chip."""
+    c = THEMES[theme]
+    name_size, desc_size, tag_size = 17.0, 12.5, 10.5
+    inner_w = CARD_W - CARD_PAD * 2
+
+    has_media = card.logo is not None or card.slug in NEEDS_PLACEHOLDER
+    top = LOGO_BOTTOM + 30 if has_media else CARD_PAD + name_size
+    desc_lines = wrap(card.desc, desc_size, 400, inner_w, 2)
+    height = top + 10 + 2 * 18 + CARD_PAD - 6  # always two description lines tall
+
+    name_w = text_width(card.name, name_size, 600)
+    chars = card.name + card.desc + (card.tag or "")
+    faces = font_face(600, chars) + font_face(400, chars)
+
+    media = ""
+    if card.logo:
+        # plate behind the logo: dark pills (Onigiri, 8BitDo) would otherwise sink
+        # into the dark card, and it keeps every tile the same size
+        plate_h = LOGO_W * 111.0 / 203.0 + 18
+        media = (
+            f'<rect x="{CARD_PAD - 9:.1f}" y="{LOGO_BOTTOM + 9 - plate_h:.1f}" '
+            f'width="{LOGO_W + 18:.1f}" height="{plate_h:.1f}" rx="20" '
+            f'fill="{c["body"]}"/>'
+        ) + logo_markup(card.logo, LOGO_W, LOGO_BOTTOM, CARD_PAD)
+    elif card.slug in NEEDS_PLACEHOLDER:
+        media = placeholder_markup(theme, LOGO_W, LOGO_BOTTOM, CARD_PAD)
+
+    chip = ""
+    if card.tag:
+        tw = text_width(card.tag, tag_size, 600)
+        cw, ch = tw + 18, 19.0
+        cx = CARD_PAD + name_w + 9
+        chip = (
+            f'<rect x="{cx:.1f}" y="{top - name_size + 1.5:.1f}" width="{cw:.1f}" '
+            f'height="{ch:.1f}" rx="{ch / 2:.1f}" fill="{c[card.tag_colour]}"/>'
+            f'<text x="{cx + 9:.1f}" y="{top - name_size + 1.5 + ch / 2 + tag_size * 0.35:.1f}" '
+            f'class="chip">{esc(card.tag)}</text>'
+        )
+
+    desc = "".join(
+        f'<text x="{CARD_PAD:.1f}" y="{top + 22 + i * 18:.1f}" class="d">{esc(line)}</text>'
+        for i, line in enumerate(desc_lines)
+    )
+
+    return (
+        f'<svg xmlns="http://www.w3.org/2000/svg" width="{CARD_W:.0f}" height="{height:.0f}" '
+        f'viewBox="0 0 {CARD_W:.0f} {height:.0f}" role="img" '
+        f'aria-label="{esc(card.name)} - {esc(card.desc)}">'
+        f"<style>{faces}"
+        f"text{{font-family:'Poppins',sans-serif}}"
+        f".n{{font-size:{name_size}px;font-weight:600;fill:{c['text']}}}"
+        f".d{{font-size:{desc_size}px;font-weight:400;fill:{c['dim']}}}"
+        f".chip{{font-size:{tag_size}px;font-weight:600;fill:{c['badge_fg']}}}"
+        f"</style>"
+        f'<rect x="0.75" y="0.75" width="{CARD_W - 1.5:.1f}" height="{height - 1.5:.1f}" '
+        f'rx="22" fill="{c["card"]}" stroke="{c["card_border"]}" '
+        f'stroke-opacity="{c["card_border_op"]}" stroke-width="1.5"/>'
+        f"{media}"
+        f'<text x="{CARD_PAD:.1f}" y="{top:.1f}" class="n">{esc(card.name)}</text>'
+        f"{chip}{desc}"
+        f"</svg>"
+    )
+
+
+NEEDS_PLACEHOLDER = {"webapp"}
+
+ADDONS = [
+    Card("onigiri", "Onigiri", "A modern, customizable replacement for the "
+         "standard Anki interface", "onigiri.svg", "beta", "mauve"),
+    Card("focumon", "Focumon", "Focumon inside Anki, made with Milton Ren", "focumon.svg"),
+    Card("lofitown", "lofi.town", "Play lofi.town without ever leaving your reviews",
+         "lofitown.svg"),
+    Card("league", "League", "Climb the league table while you study", "league.svg",
+         "paid", "yellow"),
+    Card("senchado", "Senchado", "A tea timer for your study breaks", "senchado.svg"),
+    Card("paper", "Paper", "Multiple cheat sheets, one shortcut away", "paper.svg"),
+    Card("sticky", "Sticky", "Quick notes pinned to the main menu", "sticky.svg"),
+    Card("power", "Power", "Your battery level, right on the main menu", "power.svg"),
+    Card("hours", "Hours", "The current time, right on the main menu", "hours.svg"),
+    Card("global", "Global", "Temperature and forecast via Open-Meteo", "global.svg"),
+    Card("berry", "Berry", "See which Bluetooth devices are connected", "berry.svg"),
+    Card("fixcaps", "First Letter Caps fix", "Temporary fix for the macOS capslock bug",
+         "fixcaps.jpg"),
+]
+
+SOON = [
+    Card("astra", "Astra", "Anki add-on, in development", "astra.svg"),
+    Card("8bitdo", "8BitDo Micro", "Anki add-on, in development", "8bitdo.svg"),
+    Card("webapp", "A new web-app", "In development, details soon"),
+]
+
+PROJECTS = [
+    Card("stacked-library", "Stacked Library", "Spicetify extension that groups artists, "
+         "albums and playlists in Spotify", None, "JavaScript", "yellow"),
+    Card("little-cats", "Little Cats Explain", "AI Studio experiment recreating "
+         "“Explain Things with Lots of Tiny Cats”", None, "TypeScript", "blue"),
+    Card("highlightr", "Highlightr Enhanced", "Fork of the Obsidian highlighting menu, "
+         "with colour-coded highlighting", None, "TypeScript", "blue"),
 ]
 
 
@@ -459,6 +671,8 @@ def main() -> None:
             write(f"assets/header-{slug}-{theme}.svg", header_svg(theme, label, colour))
         for slug, label, icon, colour in BADGES:
             write(f"assets/badges/{slug}-{theme}.svg", badge_svg(theme, label, icon, colour))
+        for card in ADDONS + SOON + PROJECTS:
+            write(f"assets/cards/{card.slug}-{theme}.svg", card_svg(theme, card))
 
 
 if __name__ == "__main__":
