@@ -189,15 +189,15 @@ PROMPT_HOST = "anki"
 LINES = [
     Line(
         "whoami",
-        [("Pre-medical student, Anki add-on developer & AI enthusiast", "mauve")],
+        [("Pre medical student, Anki add on developer & AI enthusiast", "mauve")],
     ),
     Line(
         "cat skills.txt",
-        [("Python  ·  PyQt  ·  Anki Add-ons  ·  Web Apps  ·  AI", "teal")],
+        [("Python  ·  PyQt  ·  Anki Add ons  ·  Web apps  ·  AI", "teal")],
     ),
     Line(
         "cat status.txt",
-        [("Brazil  ·  shipping add-ons  ·  new web-app in the oven", "peach")],
+        [("Brazil  ·  shipping add ons  ·  new web app in the oven", "peach")],
     ),
 ]
 
@@ -416,36 +416,31 @@ def terminal_svg(theme: str) -> str:
 
 HEADERS = [
     ("about", "About me", "mauve"),
-    ("addons", "Anki add-ons", "green"),
+    ("addons", "Anki add ons", "green"),
     ("projects", "Other projects", "blue"),
     ("soon", "In the oven", "peach"),
-    ("snake", "The snake eats my commits", "teal"),
-    ("connect", "Come say hi", "red"),
+    ("connect", "Get in touch", "red"),
 ]
 
 
 def header_svg(theme: str, label: str, colour: str) -> str:
-    """Fully rounded pill chip - solid accent fill, no gradient."""
+    """Neutral, rounded rectangular section label."""
     c = THEMES[theme]
     size = 19.0
-    pad = 22.0
-    dot = 9.0
-    gap = 11.0
+    pad = 18.0
     w = text_width(label, size, 600)
-    width = int(pad + dot + gap + w + pad)
-    height = 42
+    width = int(pad + w + pad)
+    height = 38
     face = font_face(600, label)
     return (
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" '
         f'viewBox="0 0 {width} {height}" role="img" aria-label="{esc(label)}">'
         f"<style>{face}"
         f"text{{font-family:'Poppins',sans-serif;font-size:{size}px;font-weight:600;"
-        f"fill:{c['badge_fg']}}}</style>"
-        f'<rect width="{width}" height="{height}" rx="{height / 2:.1f}" '
-        f'fill="{c[colour]}"/>'
-        f'<circle cx="{pad + dot / 2:.1f}" cy="{height / 2:.1f}" r="{dot / 2:.1f}" '
-        f'fill="{c["badge_fg"]}" opacity="0.85"/>'
-        f'<text x="{pad + dot + gap:.1f}" y="{height / 2 + size * 0.35:.1f}">'
+        f"fill:{c['text']}}}</style>"
+        f'<rect x="0.75" y="0.75" width="{width - 1.5:.1f}" height="{height - 1.5:.1f}" '
+        f'rx="{R_MD:.0f}" fill="{c["chrome"]}" stroke="{c["border"]}" stroke-width="1.5"/>'
+        f'<text x="{pad:.1f}" y="{height / 2 + size * 0.35:.1f}">'
         f"{esc(label)}</text>"
         f"</svg>"
     )
@@ -465,7 +460,7 @@ ICONS = {
 
 
 def badge_svg(theme: str, label: str, icon: str, colour: str) -> str:
-    """Flat pill badge - solid fill, no gradient."""
+    """Neutral, rounded rectangular link badge."""
     c = THEMES[theme]
     size = 14.0
     pad = 18.0
@@ -475,8 +470,7 @@ def badge_svg(theme: str, label: str, icon: str, colour: str) -> str:
     width = int(pad + icon_size + gap + w + pad)
     height = 34
     face = font_face(600, label)
-    fill = c[colour]
-    fg = c["badge_fg"]
+    fg = c["text"]
     scale = icon_size / 24.0
     icon_y = (height - icon_size) / 2
     return (
@@ -485,7 +479,8 @@ def badge_svg(theme: str, label: str, icon: str, colour: str) -> str:
         f"<style>{face}"
         f"text{{font-family:'Poppins',sans-serif;font-size:{size}px;font-weight:600;fill:{fg}}}"
         f"</style>"
-        f'<rect width="{width}" height="{height}" rx="{height / 2:.1f}" fill="{fill}"/>'
+        f'<rect x="0.75" y="0.75" width="{width - 1.5:.1f}" height="{height - 1.5:.1f}" '
+        f'rx="{R_SM:.0f}" fill="{c["badge_bg"]}" stroke="{c["border"]}" stroke-width="1.5"/>'
         f'<g transform="translate({pad:.1f} {icon_y:.1f}) scale({scale:.4f})">'
         f'<path d="{ICONS[icon]}" fill="{fg}"/></g>'
         f'<text x="{pad + icon_size + gap:.1f}" y="{height / 2 + size * 0.35:.1f}">'
@@ -495,7 +490,7 @@ def badge_svg(theme: str, label: str, icon: str, colour: str) -> str:
 
 BADGES = [
     ("discord", "Join my Discord", "discord", "mauve"),
-    ("ankiweb", "My add-ons on AnkiWeb", "anki", "blue"),
+    ("ankiweb", "My add ons on AnkiWeb", "anki", "blue"),
     ("github", "All my repos", "github", "green"),
 ]
 
@@ -522,13 +517,13 @@ def logo_markup(filename: str, w: float, bottom: float, x: float) -> str:
             raw = fh.read()
         mime = "image/png" if filename.lower().endswith(".png") else "image/jpeg"
         b64 = base64.b64encode(raw).decode()
-        # flat logos are 203x111 pills; JPEG has no alpha, so clip the corners back
+        # JPEG has no alpha, so clip its corners to the shared shape language.
         vb_w, vb_h = 203.0, 111.0
         h = w * vb_h / vb_w
         cid = f"clip-{os.path.splitext(filename)[0]}"
         return (
             f'<clipPath id="{cid}"><rect x="{x:.1f}" y="{bottom - h:.1f}" '
-            f'width="{w:.1f}" height="{h:.1f}" rx="{h / 2:.1f}"/></clipPath>'
+            f'width="{w:.1f}" height="{h:.1f}" rx="{R_MD:.0f}"/></clipPath>'
             f'<image x="{x:.1f}" y="{bottom - h:.1f}" width="{w:.1f}" height="{h:.1f}" '
             f'clip-path="url(#{cid})" href="data:{mime};base64,{b64}"/>'
         )
@@ -553,8 +548,7 @@ def placeholder_markup(theme: str, w: float, bottom: float, x: float) -> str:
     h = w * 111.0 / 203.0
     return (
         f'<rect x="{x:.1f}" y="{bottom - h:.1f}" width="{w:.1f}" height="{h:.1f}" '
-        f'rx="{h / 2:.1f}" fill="none" stroke="{c["dim"]}" stroke-width="2" '
-        f'stroke-dasharray="7 7" opacity="0.55"/>'
+        f'rx="{R_MD:.0f}" fill="{c["chrome"]}" stroke="{c["border"]}" stroke-width="1.5"/>'
     )
 
 
@@ -569,7 +563,7 @@ class Card:
 
 
 def card_svg(theme: str, card: Card) -> str:
-    """Rounded surface: logo pill, name, wrapped description, optional chip."""
+    """Rounded surface: logo, name, wrapped description, optional tag."""
     c = THEMES[theme]
     name_size, desc_size, tag_size = 17.0, 12.5, 10.5
     inner_w = CARD_W - CARD_PAD * 2
@@ -585,14 +579,8 @@ def card_svg(theme: str, card: Card) -> str:
 
     media = ""
     if card.logo:
-        # plate behind the logo: dark pills (Onigiri, 8BitDo) would otherwise sink
-        # into the dark card, and it keeps every tile the same size
-        plate_h = LOGO_W * 111.0 / 203.0 + 18
-        media = (
-            f'<rect x="{CARD_PAD - 9:.1f}" y="{LOGO_BOTTOM + 9 - plate_h:.1f}" '
-            f'width="{LOGO_W + 18:.1f}" height="{plate_h:.1f}" rx="20" '
-            f'fill="{c["body"]}"/>'
-        ) + logo_markup(card.logo, LOGO_W, LOGO_BOTTOM, CARD_PAD)
+        # Keep the original logo directly on the card. No white logo plates.
+        media = logo_markup(card.logo, LOGO_W, LOGO_BOTTOM, CARD_PAD)
     elif card.slug in NEEDS_PLACEHOLDER:
         media = placeholder_markup(theme, LOGO_W, LOGO_BOTTOM, CARD_PAD)
 
@@ -603,7 +591,8 @@ def card_svg(theme: str, card: Card) -> str:
         cx = CARD_PAD + name_w + 9
         chip = (
             f'<rect x="{cx:.1f}" y="{top - name_size + 1.5:.1f}" width="{cw:.1f}" '
-            f'height="{ch:.1f}" rx="{ch / 2:.1f}" fill="{c[card.tag_colour]}"/>'
+            f'height="{ch:.1f}" rx="{R_SM:.0f}" fill="{c["chrome"]}" '
+            f'stroke="{c["border"]}" stroke-width="1"/>'
             f'<text x="{cx + 9:.1f}" y="{top - name_size + 1.5 + ch / 2 + tag_size * 0.35:.1f}" '
             f'class="chip">{esc(card.tag)}</text>'
         )
@@ -621,10 +610,10 @@ def card_svg(theme: str, card: Card) -> str:
         f"text{{font-family:'Poppins',sans-serif}}"
         f".n{{font-size:{name_size}px;font-weight:600;fill:{c['text']}}}"
         f".d{{font-size:{desc_size}px;font-weight:400;fill:{c['dim']}}}"
-        f".chip{{font-size:{tag_size}px;font-weight:600;fill:{c['badge_fg']}}}"
+        f".chip{{font-size:{tag_size}px;font-weight:600;fill:{c['dim']}}}"
         f"</style>"
         f'<rect x="0.75" y="0.75" width="{CARD_W - 1.5:.1f}" height="{height - 1.5:.1f}" '
-        f'rx="22" fill="{c["card"]}" stroke="{c["card_border"]}" '
+        f'rx="{R_LG:.0f}" fill="{c["card"]}" stroke="{c["card_border"]}" '
         f'stroke-opacity="{c["card_border_op"]}" stroke-width="1.5"/>'
         f"{media}"
         f'<text x="{CARD_PAD:.1f}" y="{top:.1f}" class="n">{esc(card.name)}</text>'
@@ -650,14 +639,14 @@ ADDONS = [
     Card("hours", "Hours", "The current time, right on the main menu", "hours.svg"),
     Card("global", "Global", "Temperature and forecast via Open-Meteo", "global.svg"),
     Card("berry", "Berry", "See which Bluetooth devices are connected", "berry.svg"),
-    Card("fixcaps", "First Letter Caps fix", "Temporary fix for the macOS capslock bug",
+    Card("fixcaps", "First Letter Caps fix", "Temporary fix for the macOS caps lock bug",
          "fixcaps.jpg"),
 ]
 
 SOON = [
-    Card("astra", "Astra", "Anki add-on, in development", "astra.svg"),
-    Card("8bitdo", "8BitDo Micro", "Anki add-on, in development", "8bitdo.svg"),
-    Card("webapp", "A new web-app", "In development, details soon"),
+    Card("astra", "Astra", "Anki add on, in development", "astra.svg"),
+    Card("8bitdo", "8BitDo Micro", "Anki add on, in development", "8bitdo.svg"),
+    Card("webapp", "A new web app", "In development, details soon"),
 ]
 
 PROJECTS = [
