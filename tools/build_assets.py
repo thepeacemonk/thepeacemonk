@@ -33,54 +33,66 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FONT_DIR = os.path.join(ROOT, "assets", "fonts")
 
 # --------------------------------------------------------------------------
-# palette - flat colours only, no gradients anywhere
+# palette - neutral greys only, flat, no gradients anywhere
 # --------------------------------------------------------------------------
 
-# Every hex below comes from the official GitHub brand palette
-# (brand.github.com/foundations/color): core green + process black, the six
-# neutrals, and the Copilot / Security accent ramps.
+# Straight from the GitHub UI neutrals (Primer). No hues: the only colour on
+# the page comes from the add-on logos, which keep their own palette.
+# The old accent keys (green/blue/mauve/...) still exist so callers keep
+# working, but they all resolve to a grey step now.
 
 LIGHT = {
-    "page": "#f2f5f3",       # gray 1
-    "chrome": "#e4ebe6",     # gray 2
+    "page": "#ffffff",
+    "chrome": "#f6f8fa",
     "body": "#ffffff",
-    "border": "#b6bfb8",     # gray 3
-    "text": "#101411",       # process black
-    "dim": "#909692",        # gray 4
-    "green": "#08872b",      # green 5
-    "blue": "#1a61fe",       # blue 3
-    "mauve": "#8534f3",      # copilot purple
-    "peach": "#d67200",      # lime 5
-    "teal": "#212183",       # blue 5
-    "red": "#c53211",        # orange 4
-    "yellow": "#db9d00",     # lime 4
-    "card": "#f2f5f3",       # gray 1
-    "card_border": "#dfe6e1",
+    "border": "#d1d9e0",
+    "text": "#1f2328",
+    "dim": "#59636e",
+    "soft": "#818b98",
+    "card": "#ffffff",
+    "card_border": "#d1d9e0",
     "card_border_op": "1",
-    "badge_fg": "#ffffff",
+    "badge_bg": "#f6f8fa",
+    "badge_fg": "#1f2328",
 }
 
 DARK = {
-    "page": "#101411",       # process black
-    "chrome": "#232925",     # gray 5
-    "body": "#101411",
-    "border": "#232925",     # gray 5
-    "text": "#f2f5f3",       # gray 1
-    "dim": "#909692",        # gray 4
-    "green": "#5fed83",      # green 3
-    "blue": "#3094ff",       # security blue
-    "mauve": "#b870ff",      # purple 2
-    "peach": "#f08a3a",      # orange 2
-    "teal": "#9eecff",       # blue 1
-    "red": "#fe4c25",        # orange 3
-    "yellow": "#d3fa37",     # lime 2
-    "card": "#232925",       # gray 5
-    "card_border": "#909692",  # gray 4
-    "card_border_op": "0.35",
-    "badge_fg": "#101411",
+    "page": "#0d1117",
+    "chrome": "#161b22",
+    "body": "#0d1117",
+    "border": "#30363d",
+    "text": "#e6edf3",
+    "dim": "#9198a1",
+    "soft": "#6e7681",
+    "card": "#161b22",
+    "card_border": "#30363d",
+    "card_border_op": "1",
+    "badge_bg": "#161b22",
+    "badge_fg": "#e6edf3",
 }
 
+# legacy accent names -> grey steps, so nothing on the page shouts
+for _pal in (LIGHT, DARK):
+    _pal.update(
+        green=_pal["text"],
+        blue=_pal["dim"],
+        mauve=_pal["text"],
+        peach=_pal["dim"],
+        teal=_pal["dim"],
+        red=_pal["soft"],
+        yellow=_pal["soft"],
+    )
+
 THEMES = {"light": LIGHT, "dark": DARK}
+
+# --------------------------------------------------------------------------
+# shape language - rectangles with a small radius, never pills
+# --------------------------------------------------------------------------
+
+R_SM = 6.0     # chips
+R_MD = 8.0     # badges, headers, logo plates
+R_LG = 10.0    # cards
+R_XL = 12.0    # hero terminal
 
 # --------------------------------------------------------------------------
 # font plumbing
@@ -367,8 +379,11 @@ def terminal_svg(theme: str) -> str:
     )
 
     dots = ""
-    for k, colour in enumerate((c["red"], c["yellow"], c["green"])):
-        dots += f'<circle cx="{28 + k * 20}" cy="{CHROME_H / 2:.0f}" r="6" fill="{colour}"/>'
+    for k in range(3):
+        dots += (
+            f'<circle cx="{28 + k * 20}" cy="{CHROME_H / 2:.0f}" r="5.5" fill="none" '
+            f'stroke="{c["border"]}" stroke-width="1.5"/>'
+        )
     title = f"{PROMPT_USER}@{PROMPT_HOST}: ~"
     title_face = font_face(500, title)
     title_w = text_width(title, 13, 500)
@@ -380,10 +395,11 @@ def terminal_svg(theme: str) -> str:
         f"<style>{style}{title_face}"
         f".t{{font-family:'Poppins',sans-serif;font-size:13px;font-weight:500;fill:{c['dim']}}}"
         f"</style>"
-        f'<rect x="1" y="1" width="{W - 2}" height="{height - 2}" rx="20" '
+        f'<rect x="1" y="1" width="{W - 2}" height="{height - 2}" rx="{R_XL:.0f}" '
         f'fill="{c["body"]}" stroke="{c["border"]}" stroke-width="1.5"/>'
-        f'<path d="M1 21a20 20 0 0 1 20-20h{W - 42}a20 20 0 0 1 20 20v{CHROME_H - 21}H1z" '
-        f'fill="{c["chrome"]}"/>'
+        f'<path d="M1 {R_XL + 1:.0f}a{R_XL:.0f} {R_XL:.0f} 0 0 1 {R_XL:.0f}-{R_XL:.0f}'
+        f'h{W - 2 * R_XL - 2:.0f}a{R_XL:.0f} {R_XL:.0f} 0 0 1 {R_XL:.0f} {R_XL:.0f}'
+        f'v{CHROME_H - R_XL - 1:.0f}H1z" fill="{c["chrome"]}"/>'
         f'<line x1="1" y1="{CHROME_H}" x2="{W - 1}" y2="{CHROME_H}" '
         f'stroke="{c["border"]}" stroke-width="1.5"/>'
         f"{dots}"
