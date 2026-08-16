@@ -617,8 +617,14 @@ def logo_markup(filename: str, w: float, bottom: float, x: float) -> str:
             raw = fh.read()
         mime = "image/png" if filename.lower().endswith(".png") else "image/jpeg"
         b64 = base64.b64encode(raw).decode()
-        # JPEG has no alpha, so clip its corners to the shared shape language.
-        vb_w, vb_h = 203.0, 111.0
+        # PNG dimensions are stored in the fixed IHDR header. JPEG remains on
+        # the legacy logo canvas because it has no alpha and is no longer used
+        # by current cards.
+        if mime == "image/png" and raw.startswith(b"\x89PNG\r\n\x1a\n"):
+            vb_w = float(int.from_bytes(raw[16:20], "big"))
+            vb_h = float(int.from_bytes(raw[20:24], "big"))
+        else:
+            vb_w, vb_h = 203.0, 111.0
         h = w * vb_h / vb_w
         cid = f"clip-{os.path.splitext(filename)[0]}"
         return (
@@ -743,7 +749,7 @@ ADDONS = [
     Card("global", "Global", "Temperature and forecast via Open-Meteo", "global.svg"),
     Card("berry", "Berry", "See which Bluetooth devices are connected", "berry.svg"),
     Card("fixcaps", "First Letter Caps fix", "Temporary fix for the macOS caps lock bug",
-         "fixcaps.jpg"),
+         "fixcaps-transparent.png"),
 ]
 
 SOON = [
