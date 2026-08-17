@@ -4,20 +4,18 @@
   <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/df7ff96b2f8dd53122ec5d18e6364f6bfd771491/assets/terminal-dark.svg">
   <img alt="peace@anki: pre medical student, Anki add on developer and AI enthusiast" src="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/df7ff96b2f8dd53122ec5d18e6364f6bfd771491/assets/terminal-light.svg" width="760">
 </picture>
-
 <br><br>
-
 <a href="https://discord.gg/h4bYatgh44"><picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/df7ff96b2f8dd53122ec5d18e6364f6bfd771491/assets/badges/discord-dark.svg">
-  <img alt="Join my Discord" src="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/df7ff96b2f8dd53122ec5d18e6364f6bfd771491/assets/badges/discord-light.svg" height="34">
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/main/assets/badges/discord-dark.svg">
+  <img alt="Join my Discord" src="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/main/assets/badges/discord-light.svg" height="34">
 </picture></a>
 <a href="https://ankiweb.net/shared/by-author/1011095603"><picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/df7ff96b2f8dd53122ec5d18e6364f6bfd771491/assets/badges/ankiweb-dark.svg">
-  <img alt="My add ons on AnkiWeb" src="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/df7ff96b2f8dd53122ec5d18e6364f6bfd771491/assets/badges/ankiweb-light.svg" height="34">
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/main/assets/badges/ankiweb-dark.svg">
+  <img alt="My add ons on AnkiWeb" src="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/main/assets/badges/ankiweb-light.svg" height="34">
 </picture></a>
 <a href="https://github.com/thepeacemonk"><picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/df7ff96b2f8dd53122ec5d18e6364f6bfd771491/assets/badges/github-dark.svg">
-  <img alt="All my repositories" src="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/df7ff96b2f8dd53122ec5d18e6364f6bfd771491/assets/badges/github-light.svg" height="34">
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/main/assets/badges/github-dark.svg">
+  <img alt="All my repositories" src="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/main/assets/badges/github-light.svg" height="34">
 </picture></a>
 
 </div>
