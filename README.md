@@ -94,14 +94,3 @@ I enjoy AI, automation, and thoughtful tools.
 <picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/df7ff96b2f8dd53122ec5d18e6364f6bfd771491/assets/cards/webapp-dark.svg"><img alt="A new web app, in development" src="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/df7ff96b2f8dd53122ec5d18e6364f6bfd771491/assets/cards/webapp-light.svg" width="260"></picture>
 
 </div>
-
-<br>
-
-<div>
-
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/main/assets/heatmap-dark.svg?v=20260815">
-  <img alt="GitHub contribution heatmap" src="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/main/assets/heatmap-light.svg?v=20260815" width="760">
-</picture>
-
-</div>
