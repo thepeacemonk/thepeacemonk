@@ -1,10 +1,8 @@
-<!-- Generated gallery assets: python3 tools/build_assets.py -->
-
 <picture>
   <source media="(max-width: 500px) and (prefers-color-scheme: dark)" srcset="./assets/profile/intro-compact-dark.svg">
   <source media="(max-width: 500px)" srcset="./assets/profile/intro-compact-light.svg">
   <source media="(prefers-color-scheme: dark)" srcset="./assets/profile/intro-dark.svg">
-  <img src="./assets/profile/intro-light.svg" alt="peace — Anki add-ons and small experiments" width="808">
+  <img src="./assets/profile/intro-light.svg" alt="peace — Apps, add-ons and small experiments" width="808">
 </picture>
 
 Pre-medical student from **Brazil**, making focused Anki add-ons that make studying feel a little easier.
