@@ -107,35 +107,6 @@ I enjoy AI, automation, and thoughtful tools.
 
 <br>
 
-## Other projects
-
-<div align="center">
-
-<a href="https://github.com/thepeacemonk/Stacked-Library">
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./assets/cards/stacked-library-dark.svg">
-  <img src="./assets/cards/stacked-library-light.svg" alt="Stacked Library — Spicetify extension that groups artists, albums and playlists in Spotify" width="260">
-</picture>
-</a>
-
-<a href="https://github.com/thepeacemonk/Little-Cats-Explain">
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./assets/cards/little-cats-dark.svg">
-  <img src="./assets/cards/little-cats-light.svg" alt="Little Cats Explain — AI Studio experiment recreating “Explain Things with Lots of Tiny Cats”" width="260">
-</picture>
-</a>
-
-<a href="https://github.com/thepeacemonk/Highlightr-Enhanced">
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./assets/cards/highlightr-dark.svg">
-  <img src="./assets/cards/highlightr-light.svg" alt="Highlightr Enhanced — Fork of the Obsidian highlighting menu, with colour-coded highlighting" width="260">
-</picture>
-</a>
-
-</div>
-
-<br>
-
 ## In the oven
 
 <div align="center">
