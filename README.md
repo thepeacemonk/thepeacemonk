@@ -6,8 +6,28 @@
   <source media="(prefers-color-scheme: dark)" srcset="./assets/profile/intro-dark.svg">
   <img src="./assets/profile/intro-light.svg" alt="peace — Anki add-ons and small experiments" width="808">
 </picture>
+<<<<<<< HEAD
 
 Pre-medical student from **Brazil**, making focused Anki add-ons that make studying feel a little easier.
+=======
+<br><br>
+<a href="https://discord.gg/h4bYatgh44"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/main/assets/badges/discord-dark.svg"><img alt="Join my Discord" src="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/main/assets/badges/discord-light.svg" height="34"></picture></a>
+<a href="https://ankiweb.net/shared/by-author/1011095603"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/main/assets/badges/ankiweb-dark.svg"><img alt="My add ons on AnkiWeb" src="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/main/assets/badges/ankiweb-light.svg" height="34"></picture></a>
+<a href="https://github.com/thepeacemonk"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/main/assets/badges/github-dark.svg"><img alt="All my repositories" src="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/main/assets/badges/github-light.svg" height="34"></picture></a>
+
+</div>
+
+<br>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/df7ff96b2f8dd53122ec5d18e6364f6bfd771491/assets/header-about-dark.svg">
+  <img alt="About me" src="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/df7ff96b2f8dd53122ec5d18e6364f6bfd771491/assets/header-about-light.svg" height="38">
+</picture>
+
+<br>
+
+Pre medical student from **Brazil**, making focused Anki add ons that make studying feel a little easier.
+>>>>>>> 36db93ad87f85185bd84ade3ce7c4c64196f8286
 
 I enjoy AI, automation, and thoughtful tools.
 
@@ -145,6 +165,7 @@ I enjoy AI, automation, and thoughtful tools.
   <img src="./assets/cards/astra-light.svg" alt="Astra — Anki add on, in development" width="260">
 </picture>
 
+<<<<<<< HEAD
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="./assets/cards/8bitdo-dark.svg">
   <img src="./assets/cards/8bitdo-light.svg" alt="8BitDo Micro — Anki add on, in development" width="260">
@@ -154,5 +175,12 @@ I enjoy AI, automation, and thoughtful tools.
   <source media="(prefers-color-scheme: dark)" srcset="./assets/cards/webapp-dark.svg">
   <img src="./assets/cards/webapp-light.svg" alt="New apps — In development, details soon" width="260">
 </picture>
+=======
+<div>
+
+<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/df7ff96b2f8dd53122ec5d18e6364f6bfd771491/assets/cards/astra-dark.svg"><img alt="Astra, in development" src="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/df7ff96b2f8dd53122ec5d18e6364f6bfd771491/assets/cards/astra-light.svg" width="260"></picture>
+<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/df7ff96b2f8dd53122ec5d18e6364f6bfd771491/assets/cards/8bitdo-dark.svg"><img alt="8BitDo Micro, in development" src="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/df7ff96b2f8dd53122ec5d18e6364f6bfd771491/assets/cards/8bitdo-light.svg" width="260"></picture>
+<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/df7ff96b2f8dd53122ec5d18e6364f6bfd771491/assets/cards/webapp-dark.svg"><img alt="A new web app, in development" src="https://raw.githubusercontent.com/thepeacemonk/thepeacemonk/df7ff96b2f8dd53122ec5d18e6364f6bfd771491/assets/cards/webapp-light.svg" width="260"></picture>
+>>>>>>> 36db93ad87f85185bd84ade3ce7c4c64196f8286
 
 </div>
