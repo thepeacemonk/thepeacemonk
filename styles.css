@@ -1,0 +1,83 @@
+@font-face {
+  font-family: Poppins;
+  src: url("assets/fonts/poppins-400.woff2") format("woff2");
+  font-display: swap;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: #fff;
+  color: #111;
+  font-family: Poppins, Arial, sans-serif;
+  font-size: 17px;
+  line-height: 1.7;
+}
+
+main {
+  width: min(640px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: clamp(150px, 19vh, 250px) 0 120px;
+}
+
+header { margin-bottom: 52px; }
+
+.qifrey {
+  display: block;
+  width: 112px;
+  height: 112px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  margin: 0 0 13px;
+  animation: float 4s ease-in-out infinite;
+}
+
+h1 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+.location {
+  margin: 0;
+  color: #969696;
+}
+
+section { max-width: 620px; }
+
+section p { margin: 0 0 23px; }
+
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin-top: 50px;
+}
+
+nav a {
+  color: #777;
+  font-size: 14px;
+  text-decoration: none;
+  transition: color .18s ease;
+}
+
+nav a:hover,
+nav a:focus-visible { color: #111; }
+
+@keyframes float {
+  0%, 100% { transform: translateY(-4px); }
+  50% { transform: translateY(6px); }
+}
+
+@media (max-width: 600px) {
+  body { font-size: 16px; }
+  main { padding-top: 120px; }
+  header { margin-bottom: 42px; }
+  .qifrey { width: 96px; height: 96px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .qifrey { animation: none; }
+}
